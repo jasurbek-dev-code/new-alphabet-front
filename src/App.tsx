@@ -6,7 +6,7 @@ interface HistoryItem {
   id: number;
   original_text: string;
   translated_text: string;
-  created_text: string;
+  created_at: string;
 }
 function App() {
   const [activeTab, setActiveTab] = useState<"translate" | "history">("translate");
@@ -16,15 +16,18 @@ function App() {
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [copied, setCopied] = useState(false);
   const [user, setUser] = useState<{ first_name: string } | null>(null);
+  const [rawInitData, setRawInitData] = useState<string>("");
   useEffect(() => {
     const initUser = async () => {
       try {
         window.Telegram?.WebApp?.ready?.();
         window.Telegram?.WebApp?.expand?.();
         const initData = getTelegramInitData();
+
+        setRawInitData(initData);
         if (initData) {
-          const res = await api.post("/auth", { initData: initData });
-          setUser(res.data);
+          const res = await api.post("/auth/sync", { init_data: initData });
+          setUser(res.data.user || res.data);
         }
       } catch (error) {
         console.log("Auth error:", error);
@@ -51,7 +54,7 @@ function App() {
       const fetchHistory = async () => {
         try {
           const res = await api.get("/history");
-          setHistory(res.data);
+          setHistory(res.data.items || res.data || []);
         } catch (error) {
           console.log("History error:", error);
         }
@@ -79,6 +82,17 @@ function App() {
       </header>
       {/* Main Content */}
       <main className="flex-1 p-4 max-w-md w-full mx-auto">
+        {/* Telegram initData Debug Box */}
+        <div className="mb-4 p-3 bg-slate-800/80 border border-dashed border-amber-500/50 rounded-xl text-xs space-y-1">
+          <div className="flex justify-between items-center text-amber-400 font-semibold">
+            <span>Telegram WebApp Test Info:</span>
+            <span>{rawInitData ? "✅ initData mavjud" : "❌ initData bo'sh / yo'q"}</span>
+          </div>
+          <div className="bg-slate-900 p-2 rounded border border-slate-700 text-slate-300 font-mono text-[11px] break-all max-h-32 overflow-y-auto select-all">
+            {rawInitData || "window.Telegram.WebApp.initData bo'sh (Brauzerda ochilgan bo'lishi mumkin)"}
+          </div>
+        </div>
+
         {activeTab === "translate" ? (
           <div className="space-y-4">
             <div>
@@ -122,7 +136,7 @@ function App() {
                 <div key={item.id} className="p-3 bg-slate-800 border border-slate-700 rounded-xl space-y-2">
                   <div className="text-xs text-slate-400 truncate">Asl:{item.original_text}</div>
                   <div className="text-sm text-emerald-400 font-medium">Yangi:{item.translated_text}</div>
-                  <div className="text-[10px] text-slate-500 text-right">{new Date(item.created_text).toLocaleString()}</div>
+                  <div className="text-[10px] text-slate-500 text-right">{new Date(item.created_at).toLocaleString()}</div>
                 </div>
               ))
             )}

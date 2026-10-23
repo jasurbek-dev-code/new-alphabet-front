@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api, { getTelegramInitData } from "./services/api";
-import { ArrowRightLeft, Check, Copy, History, Loader, Loader2 } from "lucide-react";
+import { ArrowRightLeft, Check, Copy, History, Loader2 } from "lucide-react";
 
 interface HistoryItem {
   id: number;
@@ -15,7 +15,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [copied, setCopied] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ first_name: string } | null>(null);
   useEffect(() => {
     const initUser = async () => {
       try {
@@ -103,6 +103,7 @@ function App() {
                 <span className="block text-xs text-slate-400 mb-1">Yangi aligfbo</span>
                 <p className="text-base text-emerald-400 font-medium whitespace-pre-wrap">{translatedText}</p>
                 <button
+                  onClick={handleCopy}
                   className="absolute  top-4 right-4 p-2 bg-slate-700  hover:bg-slate-600 rounded-lg transition text-slate-300"
                   title="Nusxalash"
                 >

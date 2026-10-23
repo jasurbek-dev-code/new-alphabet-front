@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/api/v1";
+const API_URL = "https://new-alphabet-back-3.onrender.com";
 
 export const getTelegramInitData = (): string => {
   return window.Telegram?.WebApp?.initData || "";

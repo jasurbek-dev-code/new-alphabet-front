@@ -136,9 +136,7 @@ function App() {
                 <div key={item.id} className="p-3 bg-slate-800 border border-slate-700 rounded-xl space-y-2">
                   <div className="text-xs text-slate-400 truncate">Asl:{item.original_text}</div>
                   <div className="text-sm text-emerald-400 font-medium">Yangi:{item.translated_text}</div>
-                  <div className="text-[10px] text-slate-500 text-right">
-                    {new Date(item.created_at || item.created_text).toLocaleString()}
-                  </div>
+                  <div className="text-[10px] text-slate-500 text-right">{new Date(item.created_at).toLocaleString()}</div>
                 </div>
               ))
             )}

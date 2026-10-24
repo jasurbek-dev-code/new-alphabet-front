@@ -7,23 +7,26 @@ export const DEFAULT_BROWSER_INIT_DATA =
 export const getTelegramInitData = (): string => {
   // 1. Agar haqiqiy Telegram WebApp muhitida bo'lsa
   const tgInitData = window.Telegram?.WebApp?.initData;
+  console.log("tgInitData:", tgInitData);
+
   if (tgInitData) {
     return tgInitData;
   }
 
   // 2. Telegramdan tashqarida (brauzerda) test qilish uchun localStorage'dan olish
   const localInitData = localStorage.getItem("telegram_init_data_mock");
+  console.log("localInitData:", localInitData);
+
   if (localInitData) {
     return localInitData;
   }
+  console.log("DEFAULT_BROWSER_INIT_DATA:", DEFAULT_BROWSER_INIT_DATA);
 
   // 3. Brauzerda test uchun default mock initData
   return DEFAULT_BROWSER_INIT_DATA;
 };
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://new-alphabet-back-3.onrender.com/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://new-alphabet-back-3.onrender.com/api/v1";
 
 const api = axios.create({
   baseURL: API_BASE_URL,

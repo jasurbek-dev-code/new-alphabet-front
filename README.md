@@ -1,75 +1,70 @@
-# React + TypeScript + Vite
+﻿# Uzbek Latin Transliteration Frontend (Telegram Mini App)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19, TypeScript, Tailwind CSS va Vite asosida yaratilgan zamonaviy Telegram Mini App frontendi. Bu interfeys orqali foydalanuvchilar o'zbek lotin alifbosidagi matnlarni yangi isloh qilingan alifboga tezkor va oson transliteratsiya qilishlari, natijalarni nusxalashlari hamda avvalgi tarjimalar tarixini sahifalar (pagination) orqali ko'rib chiqishlari mumkin.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ Imkoniyatlar
 
-## React Compiler
+- **Eski $\to$ Yangi alifbo translatsiyasi**: `Sh` $\to$ `Ş`, `Ch` $\to$ `Ç`, `O'` $\to$ `Ō`, `G'` $\to$ `Ğ` harflari konvertatsiyasi.
+- **Aqlli tugma nazorati**: Tarjima qilish tugmasi faqat matn kiritilganda va avvalgi yuborilgan matndan farqli bo'lgandagina faollashadi.
+- **Telegram WebApp integratsiyasi**: Telegram orqali ochilganda `window.Telegram.WebApp.initData` avtomatik olinib, backend bilan xavfsiz sinxronlashadi.
+- **Tarjimalar tarixi**:
+  - Matnlar cheklangan balandlikda va ortiqcha qismi ellipsis (`...`) bilan qisqartirilgan holda ko'rsatiladi.
+  - Moslashuvchan sahifalash (Pagination) va sahifa o'lchamini tanlash (5, 10, 20, 50).
+  - Har qanday tarix elementiga bosilganda asl va tarjima qilingan matn darhol tarjima bo'limiga yuklanadi.
+- **Nusxalash (Copy to Clipboard)**: Yagona tugma orqali transliteratsiya natijasini xotiraga nusxalash.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📁 Loyiha strukturasi
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+front/
+├── .env                  # Muhit o'zgaruvchilari (Git'ga yuklanmaydi)
+├── .env.example          # Muhit o'zgaruvchilari namunasi
+├── .gitignore            # Git e'tiborsiz qoldiradigan fayllar
+├── index.html            # Asosiy HTML sahifa
+├── package.json          # Bog'liqliklar va buyruqlar
+├── vite.config.ts        # Vite konfiguratsiyasi
+├── tsconfig.json         # TypeScript konfiguratsiyasi
+├── src/
+│   ├── App.tsx           # Asosiy UI va navigatsiya komponenti
+│   ├── main.tsx          # React ilovasining kirish nuqtasi
+│   ├── index.css         # Tailwind CSS uslublari
+│   ├── global.d.ts       # Telegram WebApp global typelari
+│   └── services/
+│       └── api.ts        # Axios client va Telegram initData interceptor
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ⚙️ Sozlash va ishga tushirish
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+### 1. Bog'liqliklarni o'rnatish
+```bash
+npm install
+# yoki bun bilan:
+bun install
 ```
+
+### 2. Muhit o'zgaruvchilarini sozlash
+Loyiha ildizida `front/.env` faylini yarating va backend API manzilini ko'rsating:
+```env
+VITE_API_BASE_URL=https://new-alphabet-back-3.onrender.com/api/v1
+```
+> **Eslatma:** Backend mahalliy kompyuterda ishlayotgan bo'lsa: `VITE_API_BASE_URL=http://localhost:8000/api/v1`
+
+### 3. Dasturni ishga tushirish
+Mahalliy dev serverni ko'tarish:
+```bash
+npm run dev
+# yoki
+bun run dev
+```
+
+### 4. Ishlab chiqarish (Production) uchun build qilish
+```bash
+npm run build
+```
+Natija `dist/` papkasida hosil bo'ladi va uni Vercel, Netlify yoki istalgan statik hostingga joylash mumkin.
